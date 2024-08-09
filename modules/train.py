@@ -1,9 +1,15 @@
+import torch
 from tqdm import tqdm
+import logging
+import os
 
-def train(model, optimizer, data_loader, num_epochs:int, device) -> list[float]:
+
+def train(model, optimizer, data_loader, num_epochs:int, device, model_dir:str) -> list[float]:
     model.train()
 
     epoch_losses = []  # List to store loss values for each epoch
+
+    logging.info('Training Starts')
 
     for epoch in range(num_epochs):
         running_loss = 0.0
@@ -25,4 +31,11 @@ def train(model, optimizer, data_loader, num_epochs:int, device) -> list[float]:
         epoch_loss = running_loss / len(data_loader)
         epoch_losses.append(epoch_loss)
 
+        model_path = os.path.join(model_dir, f"checkpoint_epoch_{epoch + 1}.pth")
+        torch.save({'model_state_dict': model.state_dict()}, model_path)
+
+        logging.info(f'{epoch + 1}/{num_epochs}\tLoss:{epoch_loss}')
+
+    logging.info('Training Ends')
+    
     return epoch_losses
