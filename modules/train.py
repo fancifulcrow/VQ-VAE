@@ -1,6 +1,6 @@
 from tqdm import tqdm
 
-def train(model, optimizer, data_loader, num_epochs, device):
+def train(model, optimizer, data_loader, num_epochs:int, device) -> list[float]:
     model.train()
 
     epoch_losses = []  # List to store loss values for each epoch

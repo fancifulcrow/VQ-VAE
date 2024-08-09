@@ -92,12 +92,12 @@ class VectorQuantizer(nn.Module):
 
 
 class VQVAE(nn.Module):
-    def __init__(self, in_channels=3, num_embeddings=512, embedding_dim=64, commitment_cost=0.25) -> None:
+    def __init__(self, in_channels=3, latent_dim=128, num_embeddings=512, embedding_dim=64, commitment_cost=0.25) -> None:
         super().__init__()
 
-        self.encoder = Encoder(in_channels, 128)
+        self.encoder = Encoder(in_channels, latent_dim)
 
-        self.conv_vq = nn.Conv2d(128, embedding_dim, kernel_size=1, stride=1)
+        self.conv_vq = nn.Conv2d(latent_dim, embedding_dim, kernel_size=1, stride=1)
         self.vector_quantizer = VectorQuantizer(num_embeddings, embedding_dim, commitment_cost)
 
         self.decoder = Decoder(embedding_dim, in_channels)
