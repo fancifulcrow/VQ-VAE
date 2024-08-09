@@ -1,0 +1,20 @@
+model:
+    in_channels: 3
+    latent_dim: 128
+    embedding_dim: 64
+    num_embeddings: 512
+    commitment_cost: 0.25
+
+training:
+    batch_size: 64
+    num_epochs: 25
+    learning_rate: 0.001
+
+dataset:
+    path: /data
+
+logging:
+    log_file: logs/file.log
+
+output:
+    model_dir: /models
