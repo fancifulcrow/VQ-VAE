@@ -1,7 +1,7 @@
 from modules.models import VQVAE
 from modules.data import load_data
 from modules.train import train
-from modules.evaluate import evaluate, reconstruct
+from modules.evaluate import evaluate
 from modules.utils import plot_loss, count_parameters, show_images
 
 import torch
@@ -12,7 +12,7 @@ import yaml
 import time
 import os
 
-with open('config/default.yaml', 'a') as file:
+with open('config/default.yaml', 'r') as file:
         config = yaml.safe_load(file)
 
 logging.basicConfig(
@@ -67,9 +67,12 @@ def main() -> None:
     test_loss = evaluate(model, test_loader, device)
     print(f'Test Loss: {test_loss}')
 
-    reconstructions = reconstruct(model, test_loader, device)
+    dataiter = iter(test_loader)
+    original, _ = next(dataiter)
 
-    show_images(test_loader)
+    reconstructions, _, _ = model(original)
+
+    show_images(original)
     show_images(reconstructions)
 
     logging.info(f'Session {session_id} End')

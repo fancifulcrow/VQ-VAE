@@ -16,13 +16,10 @@ def plot_loss(epoch_losses: list[float]) -> None:
     plt.show()
 
 
-def show_images(data_loader) -> None:
+def show_images(images) -> None:
     plt.figure(figsize=(12, 12))
 
-    dataiter = iter(data_loader)
-    images, _ = next(dataiter)
-
-    images = images.cpu()
+    images = images.detach().cpu()
 
     for i in range(25):
         plt.subplot(5, 5, i + 1)
