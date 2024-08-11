@@ -1,6 +1,5 @@
 import torch
 from tqdm import tqdm
-import logging
 
 
 def evaluate(model, data_loader, device) -> float:
@@ -14,7 +13,5 @@ def evaluate(model, data_loader, device) -> float:
             running_loss += loss.item()
 
     test_loss = running_loss / len(data_loader)
-    
-    logging.info(f'Test Loss: {test_loss}')
 
     return test_loss

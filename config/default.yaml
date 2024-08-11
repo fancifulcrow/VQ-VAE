@@ -13,8 +13,5 @@ training:
 dataset:
     path: /data
 
-logging:
-    log_file: logs/file.log
-
 output:
     model_dir: /models

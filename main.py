@@ -7,7 +7,6 @@ from modules.utils import plot_loss, count_parameters, show_images
 import torch
 from torch.utils.data import DataLoader
 import torch.optim as optim
-import logging
 import yaml
 import time
 import os
@@ -15,32 +14,9 @@ import os
 with open('config/default.yaml', 'r') as file:
         config = yaml.safe_load(file)
 
-logging.basicConfig(
-    filename=config['logging']['log_file'],
-    filemode='a',
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%Y/%m/%d %H:%M:%S',
-    level=logging.DEBUG
-)
-
-
-def log_devices() -> None:
-    if torch.cuda.is_available():
-        logging.info('CUDA is available')
-        device_names = []
-        for i in range(torch.cuda.device_count()):
-            device_names.append(f"GPU {i} : {torch.cuda.get_device_name(i)}")
-            logging.info(' | '.join(device_names))
-    else:
-            logging.info('CUDA is not available')
-
 
 def main() -> None:
-    session_id = int(time.time())
-    logging.info(f'Session {session_id} Start')
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    log_devices()
     
     train_set, test_set = load_data(root=config['dataset']['path'])
 
@@ -55,7 +31,7 @@ def main() -> None:
     
     optimizer = optim.Adam(model.parameters(), lr=config['training']['learning_rate'])
 
-    logging.info(f"No of Parameters: {count_parameters(model)}")
+    print(f"No of Parameters: {count_parameters(model)}")
 
     model_dir = os.path.join(config['output']['model_dir'], str(session_id))
     os.makedirs(model_dir, exist_ok=True)
@@ -74,8 +50,6 @@ def main() -> None:
 
     show_images(original)
     show_images(reconstructions)
-
-    logging.info(f'Session {session_id} End')
 
 
 if __name__ == "__main__":
