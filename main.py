@@ -48,7 +48,7 @@ def main() -> None:
     test_loader = DataLoader(test_set, batch_size=config['training']['batch_size'], shuffle=True)
 
     model = VQVAE(in_channels=config['model']['in_channels'],
-                  latent_dim=config['model']['latent_dim'],
+                  hidden_channels=config['model']['hidden_channels'],
                   num_embeddings=config['model']['num_embeddings'],
                   embedding_dim=config['model']['embedding_dim'],
                   commitment_cost=config['model']['commitment_cost']).to(device)
