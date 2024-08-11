@@ -33,10 +33,10 @@ def main() -> None:
 
     print(f"No of Parameters: {count_parameters(model)}")
 
-    model_dir = os.path.join(config['output']['model_dir'], str(session_id))
-    os.makedirs(model_dir, exist_ok=True)
+    training_losses = train(model, optimizer, train_loader, config['training']['num_epochs'], device)
 
-    training_losses = train(model, optimizer, train_loader, config['training']['num_epochs'], device, model_dir)
+    os.makedirs(config['output']['model_dir'], exist_ok=True)
+    torch.save({'model_state_dict': model.state_dict()}, f"{config['output']['model_dir']}/model_{int(time.time())}.pth")
 
     plot_loss(training_losses)
 
@@ -46,7 +46,7 @@ def main() -> None:
     dataiter = iter(test_loader)
     original, _ = next(dataiter)
 
-    reconstructions, _, _ = model(original)
+    reconstructions, _, _ = model(original.to(device))
 
     show_images(original)
     show_images(reconstructions)

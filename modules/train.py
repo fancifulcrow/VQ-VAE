@@ -1,9 +1,8 @@
 import torch
 from tqdm import tqdm
-import os
 
 
-def train(model, optimizer, data_loader, num_epochs:int, device, model_dir:str) -> list[float]:
+def train(model, optimizer, data_loader, num_epochs:int, device) -> list[float]:
     model.train()
 
     epoch_losses = []  # List to store loss values for each epoch
@@ -27,8 +26,5 @@ def train(model, optimizer, data_loader, num_epochs:int, device, model_dir:str) 
 
         epoch_loss = running_loss / len(data_loader)
         epoch_losses.append(epoch_loss)
-
-        model_path = os.path.join(model_dir, f"checkpoint_epoch_{epoch + 1}.pth")
-        torch.save({'model_state_dict': model.state_dict()}, model_path)
     
     return epoch_losses

@@ -14,4 +14,4 @@ dataset:
     path: /data
 
 output:
-    model_dir: /models
+    model_dir: ./models
