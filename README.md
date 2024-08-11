@@ -1,7 +1,7 @@
 # VQ-VAE: Vector Quantized Variational Autoencoder
 
 ## Overview
-This is an implementation of a Vector Quantized Variational Autoencoder (VQ-VAE) using pytorch. The model is trained on the CIFAR-10 dataset, with the goal of reconstructing images with high fidelity.
+This is an implementation of a Vector Quantized Variational Autoencoder (VQ-VAE) using pytorch. The model uses the CIFAR-10 dataset for training.
 
 ## Prerequisites
 - Python 3.x
