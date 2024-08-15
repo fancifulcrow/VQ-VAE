@@ -12,7 +12,7 @@ import time
 import os
 
 with open('config/default.yaml', 'r') as file:
-        config = yaml.safe_load(file)
+    config = yaml.safe_load(file)
 
 
 def main() -> None:
