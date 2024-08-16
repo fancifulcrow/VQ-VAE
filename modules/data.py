@@ -8,6 +8,6 @@ def load_data(root, transform=None):
             transforms.ToTensor(),
         ])
     train_set = datasets.CIFAR10(root=root, train=True, download=True, transform=transform)
-    test_set = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+    test_set = datasets.CIFAR10(root=root, train=False, download=True, transform=transform)
 
     return train_set, test_set
