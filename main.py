@@ -40,13 +40,16 @@ def main() -> None:
 
     plot_loss(training_losses)
 
-    test_loss = evaluate(model, test_loader, device)
+    test_loss, psnr, ssim, codebook_utilization = evaluate(model, test_loader, device)
     print(f'Test Loss: {test_loss}')
+    print(f"PSNR: {psnr} dB")
+    print(f"SSIM: {ssim}")
+    print(f"Codebook Utilization: {codebook_utilization * 100}%")
 
     dataiter = iter(test_loader)
     original, _ = next(dataiter)
 
-    reconstructions, _, _ = model(original.to(device))
+    reconstructions, _, _, _ = model(original.to(device))
 
     show_images(original, num_rows=10, num_cols=10)
     show_images(reconstructions, num_rows=10, num_cols=10)

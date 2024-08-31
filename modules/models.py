@@ -58,7 +58,7 @@ class VectorQuantizer(nn.Module):
         self.codebook.weight.data.uniform_(-1 / self.num_embeddings, 1 / self.num_embeddings)
 
 
-    def forward(self, inputs:torch.Tensor) -> tuple[torch.Tensor, float]:
+    def forward(self, inputs:torch.Tensor) -> tuple[torch.Tensor, float, torch.Tensor]:
         inputs = inputs.permute(0, 2, 3, 1).contiguous()
         original_shape = inputs.shape
 
@@ -77,30 +77,33 @@ class VectorQuantizer(nn.Module):
 
         quantized = quantized.permute(0, 3, 1, 2).contiguous()
 
-        return quantized, commitment_loss
+        return quantized, commitment_loss, encoding_indices
     
 
 
 class VQVAE(nn.Module):
     def __init__(self, in_channels=3, hidden_channels=128, num_embeddings=512, embedding_dim=64, commitment_cost=0.25) -> None:
         super().__init__()
+        self.num_embeddings = num_embeddings
+        self.embedding_dim = embedding_dim
+        self.commitment_cost = commitment_cost
 
         self.encoder = Encoder(in_channels, hidden_channels)
 
-        self.conv_vq = nn.Conv2d(hidden_channels, embedding_dim, kernel_size=1, stride=1)
-        self.vector_quantizer = VectorQuantizer(num_embeddings, embedding_dim, commitment_cost)
-        self.conv_out = nn.Conv2d(embedding_dim, hidden_channels, kernel_size=3, stride=1, padding=1)
+        self.conv_vq = nn.Conv2d(hidden_channels, self.embedding_dim, kernel_size=1, stride=1)
+        self.vector_quantizer = VectorQuantizer(self.num_embeddings, self.embedding_dim, self.commitment_cost)
+        self.conv_out = nn.Conv2d(self.embedding_dim, hidden_channels, kernel_size=3, stride=1, padding=1)
 
         self.decoder = Decoder(hidden_channels, in_channels)
 
 
-    def forward(self, inputs:torch.Tensor) -> tuple[torch.Tensor, float, float]:
+    def forward(self, inputs:torch.Tensor) -> tuple[torch.Tensor, float, float, torch.Tensor]:
         encoding = self.encoder(inputs)
-        quantized, commitment_loss = self.vector_quantizer(self.conv_vq(encoding))
+        quantized, commitment_loss, encoding_indices = self.vector_quantizer(self.conv_vq(encoding))
 
         reconstructions = self.decoder(self.conv_out(quantized))
 
         reconstruction_loss = F.mse_loss(reconstructions, inputs)
         total_loss = reconstruction_loss + commitment_loss
 
-        return reconstructions, total_loss, reconstruction_loss
+        return reconstructions, total_loss, reconstruction_loss, encoding_indices

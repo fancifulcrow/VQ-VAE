@@ -16,7 +16,7 @@ def train(model, optimizer, data_loader, num_epochs:int, device) -> list[float]:
 
             optimizer.zero_grad()
 
-            _, loss, _ = model(inputs)
+            _, loss, _, _ = model(inputs)
 
             loss.backward()
             optimizer.step()
