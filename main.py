@@ -48,8 +48,8 @@ def main() -> None:
 
     reconstructions, _, _ = model(original.to(device))
 
-    show_images(original)
-    show_images(reconstructions)
+    show_images(original, num_rows=10, num_cols=10)
+    show_images(reconstructions, num_rows=10, num_cols=10)
 
 
 if __name__ == "__main__":

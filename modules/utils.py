@@ -16,13 +16,13 @@ def plot_loss(epoch_losses: list[float]) -> None:
     plt.show()
 
 
-def show_images(images) -> None:
-    plt.figure(figsize=(12, 12))
+def show_images(images, num_rows:int, num_cols:int) -> None:
+    plt.figure(figsize=(8, 8))
 
     images = images.detach().cpu()
 
-    for i in range(25):
-        plt.subplot(5, 5, i + 1)
+    for i in range(num_rows * num_cols):
+        plt.subplot(num_rows, num_cols, i + 1)
         image = images[i].permute(1, 2, 0)  # Transpose from (C, H, W) to (H, W, C)
         plt.imshow(image)
         plt.axis('off')
